@@ -7,61 +7,53 @@
     <link rel="stylesheet" href="./static/mvp.css" />
 </head>
 <body>
-    <!-- Enter body here -->
     <main>
         <section>
             <header>
                 <h1>Search inventory</h1>
                 <p>Enter the details of the item you want to look for, and then click "Search".</p>
             </header>
-            <form method="GET" action="./inventory" name="inventory-search-form" id="search-form">
-                <label for="item-name">Name</label>
-                <input type="text" id="item-name" name="name" maxlength="45" />
+            <article>
+                <form method="GET" action="./inventory" name="inventory-search-form" id="search-form">
+                    <label for="item-name">Name</label>
+                    <input type="text" id="item-name" name="name" maxlength="45" />
 
-                <label for="item-quantity">Quantity</label>
-                <!-- <label for="item-quantity-none">
-                    <input type="radio" id="item-quantity-none" name="quantityCompare" value="" />
-                    <span>Do not use</span>
-                </label> -->
-                <label for="item-quantity-exact">
-                    <input type="radio" id="item-quantity-exact" name="quantityCompare" value="exact" checked />
-                    <span>Exactly</span>
-                </label>
-                <label for="item-quantity-gt">
-                    <input type="radio" id="item-quantity-gt" name="quantityCompare" value="greater" />
-                    <span>Greater than</span>
-                </label>
-                <label for="item-quantity-lt">
-                    <input type="radio" id="item-quantity-lt" name="quantityCompare" value="less" />
-                    <span>Less than</span>
-                </label>
-                <input type="number" id="item-quantity" name="quantity" step="1" min="0" max="999999" />
+                    <label for="item-quantity">Quantity</label>
+                    <label for="item-quantity-exact">
+                        <input type="radio" id="item-quantity-exact" name="quantityCompare" value="exact" checked />
+                        <span>Exactly</span>
+                    </label>
+                    <label for="item-quantity-gt">
+                        <input type="radio" id="item-quantity-gt" name="quantityCompare" value="greater" />
+                        <span>Greater than</span>
+                    </label>
+                    <label for="item-quantity-lt">
+                        <input type="radio" id="item-quantity-lt" name="quantityCompare" value="less" />
+                        <span>Less than</span>
+                    </label>
+                    <input type="number" id="item-quantity" name="quantity" step="1" min="0" max="999999" />
 
-                <label for="item-amount">Amount</label>
-                <!-- <label for="item-amount-none">
-                    <input type="radio" id="item-amount-none" name="amountCompare" value="" />
-                    <span>Do not use</span>
-                </label> -->
-                <label for="item-amount-exact">
-                    <input type="radio" id="item-amount-exact" name="amountCompare" value="exact" checked />
-                    <span>Exactly</span>
-                </label>
-                <label for="item-amount-gt">
-                    <input type="radio" id="item-amount-gt" name="amountCompare" value="greater" />
-                    <span>Greater than</span>
-                </label>
-                <label for="item-amount-lt">
-                    <input type="radio" id="item-amount-lt" name="amountCompare" value="less" />
-                    <span>Less than</span>
-                </label>
-                <input type="number" id="item-amount" name="amount" step="0.01" min="0" max="999999999.99" />
+                    <label for="item-amount">Amount</label>
+                    <label for="item-amount-exact">
+                        <input type="radio" id="item-amount-exact" name="amountCompare" value="exact" checked />
+                        <span>Exactly</span>
+                    </label>
+                    <label for="item-amount-gt">
+                        <input type="radio" id="item-amount-gt" name="amountCompare" value="greater" />
+                        <span>Greater than</span>
+                    </label>
+                    <label for="item-amount-lt">
+                        <input type="radio" id="item-amount-lt" name="amountCompare" value="less" />
+                        <span>Less than</span>
+                    </label>
+                    <input type="number" id="item-amount" name="amount" step="0.01" min="0" max="999999999.99" />
 
-                <button type="submit">Search</button>
-            </form>
-            <aside>
+                    <button type="submit">Search</button>
+                </form>
+            </article>
+            <aside style="width: var(--width-card-medium)">
                 <h3>Search results</h3>
                 <div id="inventory-search-results">
-                    <!-- TODO Get search results here, in a table -->
                     <p>Search results will go here.</p>
                 </div>
             </aside>

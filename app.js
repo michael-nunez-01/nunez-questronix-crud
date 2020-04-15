@@ -36,7 +36,7 @@ app.get('/inventory', (req, res, next) => {
     if (isObjectEmpty(req.query) === false) {
         return next();
     }
-    // If nothing else is asked, query all inventory here
+    // If nothing else is asked, query all inventory here, as-is
     const query = `SELECT * FROM \`${TABLE_NAME}\``;
     inventoryConnection.query(query, function (error, results, fields) {
         // error will be an Error if one occurred during the query
@@ -105,14 +105,36 @@ app.get('/inventory', (req, res, next) => {
         values[values.length] = req.query.amount;
     }
 
-    const query = `SELECT * FROM \`${TABLE_NAME}\` WHERE ${whereClause}`;
+    let query = `SELECT * FROM \`${TABLE_NAME}\``;
+    if (whereClause != '') query = query.concat(`WHERE ${whereClause}`);
     inventoryConnection.query(query, values, function (error, results, fields) {
         if (error) {
             console.log(error.sqlMessage);
             res.sendStatus(500);
             return;
         }
-        res.status(200).send(results);
+
+        // Create an HTML table if asked; otherwise, return the results array
+        if (req.query.makeMvpElement === "true") {
+            ejs.renderFile('./resources/itemsTable.ejs', {
+                results: results,
+                tableHeader: {
+                    name: "Name",
+                    quantity: "Quantity",
+                    amount: "Amount"
+                },
+                emptyMessage: "No results found.",
+                successMessage: null
+            }).then((compiledString) => {
+                res.status(200).send(compiledString);
+            }).catch((errorReason) => {
+                console.log(errorReason);
+                res.status(500).send(new String().concat('<table>',
+                '<thead><tr><th>Search failed!</th></tr></thead>', '<tr>',
+                '<td>Sorry, but the server could not retrieve your search.</td>',
+                '</tr>', '</table>'));
+            });
+        } else res.status(200).send(results);
     });
 });
 
@@ -140,7 +162,7 @@ app.post('/inventory', (req, res) => {
                     console.log(error.sqlMessage);
                     return;
                 }
-                ejs.renderFile('./resources/itemsTableRow.ejs', {
+                ejs.renderFile('./resources/itemsTable.ejs', {
                     results: results,
                     tableHeader: {
                         name: "Name",
@@ -153,7 +175,7 @@ app.post('/inventory', (req, res) => {
                     res.status(201).send(compiledString);
                 }).catch((errorReason) => {
                     console.log(errorReason);
-                    res.status(201).send(new String().concat('<table>',
+                    res.status(500).send(new String().concat('<table>',
                     '<thead><tr><th>Column inserted!</th></tr></thead>', '<tr>',
                     '<td>The column was successfully inserted, but the server could not reproduce your input.</td>',
                     '</tr>', '</table>'));
