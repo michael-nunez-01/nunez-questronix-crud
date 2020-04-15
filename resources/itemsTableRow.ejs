@@ -1,0 +1,25 @@
+<table>
+    <thead>
+        <tr>
+            <th><%= tableHeader.name %></th>
+            <th><%= tableHeader.quantity %></th>
+            <th><%= tableHeader.amount %></th>
+        </tr>
+    </thead>
+    <% results.forEach(resultRow => { %>
+        <tr>
+            <td><%= resultRow.name %></td>
+            <td><%= resultRow.qty %></td>
+            <td><%= resultRow.amount.toFixed(2) %></td>
+        </tr>
+    <% }) %>
+    <% if(results.length == 0) { %>
+        <tr>
+            <td colspan="3"><%= emptyMessage %></td>
+        </tr>
+    <% } else if (successMessage != null && successMessage != ''){ %>
+        <tr>
+            <td colspan="3"><%= successMessage %></td>
+        </tr>
+    <% } %>
+</table>
