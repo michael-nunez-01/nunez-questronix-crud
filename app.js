@@ -32,6 +32,7 @@ app.get('/mvp', (req, res) => {
 
 // API
 const ejs = require('ejs');
+const feather = require('feather-icons');
 app.get('/inventory', (req, res, next) => {
     if (isObjectEmpty(req.query) === false) {
         return next();
@@ -106,7 +107,7 @@ app.get('/inventory', (req, res, next) => {
     }
 
     let query = `SELECT * FROM \`${TABLE_NAME}\``;
-    if (whereClause != '') query = query.concat(`WHERE ${whereClause}`);
+    if (whereClause != '') query = query.concat(` WHERE ${whereClause}`);
     inventoryConnection.query(query, values, function (error, results, fields) {
         if (error) {
             console.log(error.sqlMessage);
@@ -116,12 +117,18 @@ app.get('/inventory', (req, res, next) => {
 
         // Create an HTML table if asked; otherwise, return the results array
         if (req.query.makeMvpElement === "true") {
-            ejs.renderFile('./resources/itemsTable.ejs', {
+            ejs.renderFile('./resources/mutableItemsTable.ejs', {
                 results: results,
                 tableHeader: {
                     name: "Name",
                     quantity: "Quantity",
-                    amount: "Amount"
+                    amount: "Amount",
+                    edit: "Edit",
+                    delete: "Delete",
+                },
+                resultAppend: {
+                    edit: feather.icons['edit-2'].toSvg(),
+                    delete: feather.icons['trash'].toSvg()
                 },
                 emptyMessage: "No results found.",
                 successMessage: null
@@ -185,5 +192,43 @@ app.post('/inventory', (req, res) => {
         else res.sendStatus(201)    // "Created"
     });
 });
+app.put('/inventory', (req, res) => {
+    if (isObjectEmpty(req.body)) {
+        res.sendStatus(501);    // "Not implemented"
+    }
+    else if (req.body.id == '' || (req.body.name == '' || req.body.quantity == '' || req.body.amount == '')) {
+        res.sendStatus(400);    // Not enough information was provided
+    }
+    const command = `UPDATE ${TABLE_NAME} SET \`name\`=?, \`qty\`=?, \`amount\`=?,`
+        +' WHERE \`id\` = ?';
+    const values = [req.body.name, req.body.quantity, req.body.amount, req.body.id];
+    inventoryConnection.query(command, values, function (error, results, fields) {
+        if (error) {
+            console.log(error.sqlMessage);
+            res.sendStatus(500);    // Represents a server-based error
+            return;
+        }
+        // TODO To display changes, you might need to query again; multiple executions are "idempotent"
+        res.sendStatus(204)    // Represents a completed action, requiring no further information
+    });
+})
+app.delete('/inventory', (req, res) => {
+    if (isObjectEmpty(req.body)) {
+        res.sendStatus(501);    // "Not implemented"
+    }
+    else if (req.body.id == '') {
+        res.sendStatus(400);    // Not enough information was provided
+    }
+    const command = `DELETE FROM ${TABLE_NAME} WHERE \`id\` = ?`;
+    inventoryConnection.query(command, req.body.id, function (error, results, fields) {
+        if (error) {
+            console.log(error.sqlMessage);
+            res.sendStatus(500);    // Represents a server-based error
+            return;
+        }
+        // TODO You should display removing changes through the HTML
+        res.sendStatus(204)    // Represents a completed action, requiring no further information
+    });
+})
 
 app.listen(PORT, () => console.log(`Example app listening at http://localhost:${PORT}`));
