@@ -1,0 +1,28 @@
+aside#inventory-search-panel {
+    width: var(--width-card-medium);
+    overflow-x: auto;
+}
+
+table tr:not(:first-child):nth-of-type(odd), table tr.open-menu ~ tr:nth-of-type(even) {
+    background-color: var(--color-bg);
+}
+table tr:not(:first-child):nth-of-type(even), table tr.open-menu ~ tr:nth-of-type(odd) {
+    background-color: var(--color-bg-secondary);
+}
+table tr.open-menu:nth-of-type(odd) {
+    background-image: linear-gradient(var(--color-bg-secondary) 90%, rgba(0,0,0,0.25));
+    /* background-color: var(--color-bg-secondary); */
+}
+table tr.open-menu:nth-of-type(even) {
+    background-image: linear-gradient(var(--color-bg) 90%, rgba(0,0,0,0.25));
+    /* background-color: var(--color-bg); */
+}
+
+table td > button.yes {
+    background-color: mediumspringgreen;
+    border-color: mediumspringgreen;
+}
+table td > button.no {
+    background-color: tomato;
+    border-color: tomato;
+}

@@ -13,8 +13,8 @@
             <td><%= resultRow.name %></td>
             <td><%= resultRow.qty %></td>
             <td><%= resultRow.amount.toFixed(2) %></td>
-            <td><a href="#"><%- resultAppend.edit %></a></td>
-            <td><a href="#"><%- resultAppend.delete %></a></td>
+            <td><a href="#" data-id="<%= resultRow.id %>" class="edit"><%- resultAppend.edit %></a></td>
+            <td><a href="#" data-id="<%= resultRow.id %>" class="delete"><%- resultAppend.delete %></a></td>
         </tr>
     <% }) %>
     <% if(results.length == 0) { %>

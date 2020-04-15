@@ -219,14 +219,13 @@ app.delete('/inventory', (req, res) => {
     else if (req.body.id == '') {
         res.sendStatus(400);    // Not enough information was provided
     }
-    const command = `DELETE FROM ${TABLE_NAME} WHERE \`id\` = ?`;
-    inventoryConnection.query(command, req.body.id, function (error, results, fields) {
+    const command = `DELETE FROM \`${TABLE_NAME}\` WHERE \`id\` = ?`;
+    inventoryConnection.query(command, [req.body.id], function (error, results, fields) {
         if (error) {
             console.log(error.sqlMessage);
             res.sendStatus(500);    // Represents a server-based error
             return;
         }
-        // TODO You should display removing changes through the HTML
         res.sendStatus(204)    // Represents a completed action, requiring no further information
     });
 })
