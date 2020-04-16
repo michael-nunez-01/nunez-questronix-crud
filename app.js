@@ -48,7 +48,7 @@ app.get('/inventory', (req, res, next) => {
             res.sendStatus(500);    // Represents a server-based error
             return;
         }
-        res.status(200).send(results);
+        res.status(200).json(results);
     });
 }, (req, res) => {
     // Prepare specific query
@@ -141,7 +141,7 @@ app.get('/inventory', (req, res, next) => {
                 '<td>Sorry, but the server could not retrieve your search.</td>',
                 '</tr>', '</table>'));
             });
-        } else res.status(200).send(results);
+        } else res.status(200).json(results);
     });
 });
 
@@ -189,7 +189,7 @@ app.post('/inventory', (req, res) => {
                 });
             });
         }
-        else res.sendStatus(201)    // "Created"
+        else res.status(201).json(results);    // "Created"
     });
 });
 app.put('/inventory', (req, res) => {
@@ -208,7 +208,7 @@ app.put('/inventory', (req, res) => {
             res.sendStatus(500);    // Represents a server-based error
             return;
         }
-        res.sendStatus(204)    // Represents a completed action, requiring no further information
+        res.status(204).json(results)    // Represents a completed action, requiring no further information
     });
 })
 app.delete('/inventory', (req, res) => {
@@ -225,7 +225,7 @@ app.delete('/inventory', (req, res) => {
             res.sendStatus(500);    // Represents a server-based error
             return;
         }
-        res.sendStatus(204)    // Represents a completed action, requiring no further information
+        res.status(204).json(results)    // Represents a completed action, requiring no further information
     });
 })
 
