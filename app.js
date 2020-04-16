@@ -122,7 +122,7 @@ app.get('/inventory', (req, res, next) => {
                 tableHeader: {
                     name: "Name",
                     quantity: "Quantity",
-                    amount: "Amount",
+                    amount: "Amount (PHP)",
                     edit: "Edit",
                     delete: "Delete",
                 },
@@ -174,7 +174,7 @@ app.post('/inventory', (req, res) => {
                     tableHeader: {
                         name: "Name",
                         quantity: "Quantity",
-                        amount: "Amount"
+                        amount: "Amount (PHP)"
                     },
                     emptyMessage: "No results found.",
                     successMessage: "Item successfully inserted!"
@@ -199,7 +199,7 @@ app.put('/inventory', (req, res) => {
     else if (req.body.id == '' || (req.body.name == '' || req.body.quantity == '' || req.body.amount == '')) {
         res.sendStatus(400);    // Not enough information was provided
     }
-    const command = `UPDATE ${TABLE_NAME} SET \`name\`=?, \`qty\`=?, \`amount\`=?,`
+    const command = `UPDATE ${TABLE_NAME} SET \`name\`=?, \`qty\`=?, \`amount\`=?`
         +' WHERE \`id\` = ?';
     const values = [req.body.name, req.body.quantity, req.body.amount, req.body.id];
     inventoryConnection.query(command, values, function (error, results, fields) {
@@ -208,7 +208,6 @@ app.put('/inventory', (req, res) => {
             res.sendStatus(500);    // Represents a server-based error
             return;
         }
-        // TODO To display changes, you might need to query again; multiple executions are "idempotent"
         res.sendStatus(204)    // Represents a completed action, requiring no further information
     });
 })

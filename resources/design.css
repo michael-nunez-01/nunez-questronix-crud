@@ -3,26 +3,34 @@ aside#inventory-search-panel {
     overflow-x: auto;
 }
 
-table tr:not(:first-child):nth-of-type(odd), table tr.open-menu ~ tr:nth-of-type(even) {
-    background-color: var(--color-bg);
+table > tbody > tr:not(:last-child):not(.open-menu) > td {
+    border-bottom: 1px solid #dddddd;
 }
-table tr:not(:first-child):nth-of-type(even), table tr.open-menu ~ tr:nth-of-type(odd) {
+table tr.open-menu {
     background-color: var(--color-bg-secondary);
 }
-table tr.open-menu:nth-of-type(odd) {
-    background-image: linear-gradient(var(--color-bg-secondary) 90%, rgba(0,0,0,0.25));
-    /* background-color: var(--color-bg-secondary); */
-}
-table tr.open-menu:nth-of-type(even) {
-    background-image: linear-gradient(var(--color-bg) 90%, rgba(0,0,0,0.25));
-    /* background-color: var(--color-bg); */
-}
 
-table td > button.yes {
-    background-color: mediumspringgreen;
-    border-color: mediumspringgreen;
+table td > a > svg {
+    min-height: 40px;
+    min-width: 1.5rem;
 }
-table td > button.no {
+table td > button {
+    margin: 0px;
+    padding: 0px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    min-height: 40px;
+}
+table td > button.link {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--color-secondary);
+}
+table td > button.delete {
     background-color: tomato;
     border-color: tomato;
+}
+table td > button.save {
+    background-color: var(--color-secondary);
+    border-color: var(--color-secondary);
 }
