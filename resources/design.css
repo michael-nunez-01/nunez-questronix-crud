@@ -3,6 +3,11 @@ aside#inventory-search-panel {
     overflow-x: auto;
 }
 
+label.error, label.error > * {
+    font-weight: normal;
+    color: darkred;
+}
+
 table > tbody > tr:not(:last-child):not(.open-menu) > td {
     border-bottom: 1px solid #dddddd;
 }

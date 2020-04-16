@@ -209,7 +209,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     incomingNameFieldInput.required = true;
                     incomingNameFieldInput.maxlength = 45;
                     incomingNameFieldInput.value = oldItemName;
-                    incomingNameFieldCell.append(incomingNameFieldLabel, incomingNameFieldInput);
+                    const incomingNameFieldError = document.createElement('label');
+                    const incomingNameFieldErrorText = document.createElement('small')
+                    incomingNameFieldError.classList.add('error');
+                    incomingNameFieldError.append(incomingNameFieldErrorText);
+                    incomingNameFieldCell.append(incomingNameFieldLabel, incomingNameFieldInput, incomingNameFieldError);
                     incomingRows[1].append(incomingNameFieldCell);
 
                     incomingRows[2].classList.add('open-menu');
@@ -227,7 +231,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     incomingQtyFieldInput.step = 1;
                     incomingQtyFieldInput.max = 999999;
                     incomingQtyFieldInput.value = oldItemQuantity;
-                    incomingQtyFieldCell.append(incomingQtyFieldLabel, incomingQtyFieldInput);
+                    const incomingQtyFieldError = document.createElement('label');
+                    const incomingQtyFieldErrorText = document.createElement('small')
+                    incomingQtyFieldError.classList.add('error');
+                    incomingQtyFieldError.append(incomingQtyFieldErrorText);
+                    incomingQtyFieldCell.append(incomingQtyFieldLabel, incomingQtyFieldInput, incomingQtyFieldError);
                     incomingRows[2].append(incomingQtyFieldCell);
 
                     incomingRows[3].classList.add('open-menu');
@@ -245,18 +253,55 @@ document.addEventListener('DOMContentLoaded', function() {
                     incomingAmtFieldInput.step = 0.01;
                     incomingAmtFieldInput.max = 999999999.99;
                     incomingAmtFieldInput.value = oldItemAmount;
-                    incomingAmtFieldCell.append(incomingAmtFieldLabel, incomingAmtFieldInput);
+                    const incomingAmtFieldError = document.createElement('label');
+                    const incomingAmtFieldErrorText = document.createElement('small')
+                    incomingAmtFieldError.classList.add('error');
+                    incomingAmtFieldError.append(incomingAmtFieldErrorText);
+                    incomingAmtFieldCell.append(incomingAmtFieldLabel, incomingAmtFieldInput, incomingAmtFieldError);
                     incomingRows[3].append(incomingAmtFieldCell);
 
                     saveButton.addEventListener('click', () => {
-                        removeRows(incomingRows);
-                        editItem(editElement.dataset.id, incomingNameFieldInput.value,
-                            incomingQtyFieldInput.value, incomingAmtFieldInput.value,
-                            () => {
-                                displayName.textContent = incomingNameFieldInput.value;
-                                displayQuantity.textContent = incomingQtyFieldInput.value;
-                                displayAmount.textContent = incomingAmtFieldInput.value;
-                            }, actionMessage);
+                        let localValidation = true;
+                        incomingNameFieldErrorText.textContent = '';
+                        incomingQtyFieldErrorText.textContent = '';
+                        incomingAmtFieldErrorText.textContent = '';
+                        if (incomingNameFieldInput.value == '') {
+                            localValidation = false;
+                            incomingNameFieldErrorText.append('You must enter a name for the item.');
+                        }
+                        if (incomingNameFieldInput.value.length > 45) {
+                            localValidation = false;
+                            incomingNameFieldErrorText.append('Your item\'s name is '+
+                                (incomingNameFieldInput.value.length - 45)+' characters too long. '+
+                                '\nPlease try to shorten it.');
+                        }
+                        if (incomingQtyFieldInput.value == '') {
+                            localValidation = false;
+                            incomingQtyFieldErrorText.append('You must enter a quantity for the item.');
+                        }
+                        if (incomingQtyFieldInput.value < 0 || incomingQtyFieldInput.value > 999999) {
+                            localValidation = false;
+                            incomingQtyFieldErrorText.append('The quantity must be between 0 to 999999 units.');
+                        }
+                        if (incomingAmtFieldInput.value == '') {
+                            localValidation = false;
+                            incomingAmtFieldErrorText.append('You must enter an amount (price) for the item.');
+                        }
+                        if (incomingAmtFieldInput.value < 0 || incomingAmtFieldInput.value > 999999999.99) {
+                            localValidation = false;
+                            incomingAmtFieldErrorText.append('The amount must be between 0 to 999999999.99 units.');
+                        }
+
+                        if (localValidation) {
+                            removeRows(incomingRows);
+                            editItem(editElement.dataset.id, incomingNameFieldInput.value,
+                                incomingQtyFieldInput.value, incomingAmtFieldInput.value,
+                                () => {
+                                    displayName.textContent = incomingNameFieldInput.value;
+                                    displayQuantity.textContent = incomingQtyFieldInput.value;
+                                    displayAmount.textContent = incomingAmtFieldInput.value;
+                                }, actionMessage);
+                        }
                     });
 
                     for (let index = incomingRows.length-1; index >= 0; index--)
